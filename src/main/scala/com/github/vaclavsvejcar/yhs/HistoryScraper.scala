@@ -5,11 +5,9 @@ import net.ruippeixotog.scalascraper.dsl.DSL.Extract._
 import net.ruippeixotog.scalascraper.dsl.DSL._
 import org.jsoup.Jsoup
 
-import scala.util.matching.Regex
-
 class HistoryScraper(cookies: Map[String, String]) {
 
-  import HistoryScraper._
+  import com.github.vaclavsvejcar.yhs.tools.Parsers._
 
   private object Url {
     val root = "https://youtube.com"
@@ -59,22 +57,6 @@ class HistoryScraper(cookies: Map[String, String]) {
     browser.setCookies("/", cookies)
     browser
   }
-}
-
-object HistoryScraper {
-
-  object Parsers {
-    val sessionToken: Regex = """'XSRF_TOKEN': "(.*?)"""".r
-  }
-
-  def parseCToken(source: String): String = {
-    source.split("&continuation=")(1).split("&")(0)
-  }
-
-  def parseSessionToken(source: String): String =
-    Parsers.sessionToken.findFirstMatchIn(source).map(_.group(1)).get // FIXME handle error case
-
-  def parseVideoId(source: String): String = source.split("=")(1)
 }
 
 case class VideoRef(id: String, title: String)
