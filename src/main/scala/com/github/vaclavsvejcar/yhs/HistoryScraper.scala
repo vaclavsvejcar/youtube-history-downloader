@@ -43,7 +43,7 @@ class HistoryScraper(cookies: Map[String, String]) extends LogSupport {
           val newTotal = total + videos.size
 
           info(s"Iteration $newIteration - writing down next ${videos.size} videos (total $newTotal videos until now)")
-          videos.foreach(video => writer.write(refToCsvRow(video)))
+          videos.foreach(video => writer.write(csvRow(video)))
 
           next(newToken, iteration + 1, total + videos.size)
         case None =>
@@ -54,7 +54,7 @@ class HistoryScraper(cookies: Map[String, String]) extends LogSupport {
 
     val firstPageVideos = parseVideos(document)
     info(s"Iteration 1 - writing down initial list of videos (total ${firstPageVideos.size})")
-    firstPageVideos.foreach(video => writer.write(refToCsvRow(video)))
+    firstPageVideos.foreach(video => writer.write(csvRow(video)))
 
     next(nextPageCToken(document), 1, firstPageVideos.size)
     writer.close()
@@ -92,7 +92,7 @@ class HistoryScraper(cookies: Map[String, String]) extends LogSupport {
   private def isLoggedIn(document: JsoupDocument): Boolean =
     document.toHtml.contains("yt-masthead-picker-name")
 
-  private def refToCsvRow(videoRef: VideoRef): String = {
+  private def csvRow(videoRef: VideoRef): String = {
     videoRef.id + "," + videoRef.title + "\n"
   }
 
