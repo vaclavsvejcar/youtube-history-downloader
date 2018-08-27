@@ -1,11 +1,17 @@
 package com.github.vaclavsvejcar.yhs
 
+import java.io.PrintWriter
+
 import net.ruippeixotog.scalascraper.browser.JsoupBrowser.JsoupDocument
 import net.ruippeixotog.scalascraper.dsl.DSL.Extract._
 import net.ruippeixotog.scalascraper.dsl.DSL._
 import org.jsoup.Jsoup
+import wvlet.log.LogSupport
 
-class HistoryScraper(cookies: Map[String, String]) {
+import scala.annotation.tailrec
+import scala.util.Try
+
+class HistoryScraper(cookies: Map[String, String]) extends LogSupport {
 
   import com.github.vaclavsvejcar.yhs.tools.Parsers._
 
@@ -18,30 +24,60 @@ class HistoryScraper(cookies: Map[String, String]) {
 
   private val browser = initBrowser()
 
-  def fetchHistory(): Unit = {
+  def fetchHistory(filename: String = "ytb_history.csv"): Unit = {
     val document = browser.get(Url.history)
-    val sessionToken = parseSessionToken(document.toHtml)
 
-    val result = parseVideos(document)
-    println("\n\n\n\n" + result)
+    if (!isLoggedIn(document)) {
+      error("User is not logged in, exiting...")
+      System.exit(1) // FIXME handle this better
+    }
+
+    val sessionToken = parseSessionToken(document.toHtml)
+    val writer = new PrintWriter(filename)
+
+    @tailrec def next(nextToken: Option[String], iteration: Int, total: Int): Unit = {
+      nextToken match {
+        case Some(token) =>
+          val (newToken, videos) = fetchNext(token, sessionToken)
+          val newIteration = iteration + 1
+          val newTotal = total + videos.size
+
+          info(s"Iteration $newIteration - writing down next ${videos.size} videos (total $newTotal videos until now)")
+          videos.foreach(video => writer.write(refToCsvRow(video)))
+
+          next(newToken, iteration + 1, total + videos.size)
+        case None =>
+          info(s"No more videos to fetch, total $total videos fetched in $iteration iterations")
+      }
+    }
+
+
+    val firstPageVideos = parseVideos(document)
+    info(s"Iteration 1 - writing down initial list of videos (total ${firstPageVideos.size})")
+    firstPageVideos.foreach(video => writer.write(refToCsvRow(video)))
+
+    next(nextPageCToken(document), 1, firstPageVideos.size)
+    writer.close()
   }
 
-  private def fetchNext(cToken: String, sessionToken: String): (String, Seq[VideoRef]) = {
+  private def fetchNext(cToken: String, sessionToken: String): (Option[String], Seq[VideoRef]) = {
     import play.api.libs.json._
     val url = Url.continuation(cToken)
     val response = browser.post(url, Map("session_token" -> sessionToken))
     val json = Json.parse(response.body.text)
-    val loadMoreHtml = Jsoup.parse((json \ "load_more_widget_html").as[String])
-    val contentHtml = Jsoup.parse((json \ "content_html").as[String])
 
-    val nextCToken = nextPageCToken(JsoupDocument(loadMoreHtml))
-    val videos = parseVideos(JsoupDocument(contentHtml))
+    val loadMoreHtml = (json \ "load_more_widget_html").asOpt[String].map(Jsoup.parse)
+    val contentHtml = (json \ "content_html").asOpt[String].map(Jsoup.parse)
+    val nextCToken = loadMoreHtml.map(JsoupDocument).flatMap(nextPageCToken)
+    val videos = contentHtml.map(JsoupDocument).map(parseVideos).getOrElse(Seq.empty)
 
     (nextCToken, videos)
   }
 
-  private def nextPageCToken(doc: JsoupDocument): String =
-    parseCToken(doc >> element(".load-more-button") >> attr("data-uix-load-more-href"))
+  private def nextPageCToken(doc: JsoupDocument): Option[String] =
+    Try(
+      parseCToken(doc >> element(".load-more-button") >> attr("data-uix-load-more-href"))
+    ).toOption
 
   private def parseVideos(doc: JsoupDocument): Seq[VideoRef] = {
     val videos = doc >> elementList("a.yt-uix-tile-link")
@@ -50,6 +86,14 @@ class HistoryScraper(cookies: Map[String, String]) {
       val title = video >> attr("title")
       VideoRef(parseVideoId(id), title)
     }
+  }
+
+  // FIXME really really naive stupid implementation, but works for testing purposes
+  private def isLoggedIn(document: JsoupDocument): Boolean =
+    document.toHtml.contains("yt-masthead-picker-name")
+
+  private def refToCsvRow(videoRef: VideoRef): String = {
+    videoRef.id + "," + videoRef.title + "\n"
   }
 
   private def initBrowser(): CustomBrowser = {
