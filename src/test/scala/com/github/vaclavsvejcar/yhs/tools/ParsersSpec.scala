@@ -1,6 +1,11 @@
 package com.github.vaclavsvejcar.yhs.tools
 
+import com.github.vaclavsvejcar.yhs.VideoRef
+import net.ruippeixotog.scalascraper.browser.JsoupBrowser.JsoupDocument
+import org.jsoup.Jsoup
 import utest._
+
+import scala.io.Source
 
 object ParsersSpec extends TestSuite {
 
@@ -52,11 +57,14 @@ object ParsersSpec extends TestSuite {
       parseSessionToken(raw) ==> expected
     }
 
-    'testParseVideoId - {
-      val expected = "theId"
-      val raw = "/watch?v=theId"
+    'testParseVideoRefs - {
+      val source = Source.fromResource("single-video-snippet.html").getLines().mkString("\n")
+      val document = JsoupDocument(Jsoup.parse(source))
+      val expected = VideoRef("aabbccdd", "The Video Title")
 
-      parseVideoId(raw) ==> expected
+      val results = parseVideoRefs(document)
+      results.size ==> 1
+      results.head ==> expected
     }
 
   }

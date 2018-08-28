@@ -1,5 +1,8 @@
 package com.github.vaclavsvejcar.yhs.tools
 
+import com.github.vaclavsvejcar.yhs.VideoRef
+import net.ruippeixotog.scalascraper.browser.JsoupBrowser.JsoupDocument
+
 import scala.util.matching.Regex
 
 object Parsers {
@@ -36,5 +39,15 @@ object Parsers {
   def parseSessionToken(source: String): String =
     Regexes.sessionToken.findFirstMatchIn(source).map(_.group(1)).get // FIXME handle error case
 
-  def parseVideoId(source: String): String = source.split("=")(1)
+  def parseVideoRefs(document: JsoupDocument): Seq[VideoRef] = {
+    import net.ruippeixotog.scalascraper.dsl.DSL.Extract._
+    import net.ruippeixotog.scalascraper.dsl.DSL._
+
+    (document >> elementList(".yt-lockup-video")).map { video =>
+      val id = video >> attr("data-context-item-id")
+      val title = video >> element("a.yt-uix-tile-link") >> attr("title")
+
+      VideoRef(id, title)
+    }
+  }
 }

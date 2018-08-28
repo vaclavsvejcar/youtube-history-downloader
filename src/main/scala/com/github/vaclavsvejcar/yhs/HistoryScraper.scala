@@ -52,7 +52,7 @@ class HistoryScraper(cookies: Map[String, String]) extends LogSupport {
     }
 
 
-    val firstPageVideos = parseVideos(document)
+    val firstPageVideos = parseVideoRefs(document)
     info(s"Iteration 1 - writing down initial list of videos (total ${firstPageVideos.size})")
     firstPageVideos.foreach(video => writer.write(csvRow(video)))
 
@@ -69,7 +69,7 @@ class HistoryScraper(cookies: Map[String, String]) extends LogSupport {
     val loadMoreHtml = (json \ "load_more_widget_html").asOpt[String].map(Jsoup.parse)
     val contentHtml = (json \ "content_html").asOpt[String].map(Jsoup.parse)
     val nextCToken = loadMoreHtml.map(JsoupDocument).flatMap(nextPageCToken)
-    val videos = contentHtml.map(JsoupDocument).map(parseVideos).getOrElse(Seq.empty)
+    val videos = contentHtml.map(JsoupDocument).map(parseVideoRefs).getOrElse(Seq.empty)
 
     (nextCToken, videos)
   }
@@ -78,15 +78,6 @@ class HistoryScraper(cookies: Map[String, String]) extends LogSupport {
     Try(
       parseCToken(doc >> element(".load-more-button") >> attr("data-uix-load-more-href"))
     ).toOption
-
-  private def parseVideos(doc: JsoupDocument): Seq[VideoRef] = {
-    val videos = doc >> elementList("a.yt-uix-tile-link")
-    videos.map { video =>
-      val id = video >> attr("href")
-      val title = video >> attr("title")
-      VideoRef(parseVideoId(id), title)
-    }
-  }
 
   // FIXME really really naive stupid implementation, but works for testing purposes
   private def isLoggedIn(document: JsoupDocument): Boolean =
@@ -102,8 +93,5 @@ class HistoryScraper(cookies: Map[String, String]) extends LogSupport {
     browser
   }
 }
-
-case class VideoRef(id: String, title: String)
-
 
 
