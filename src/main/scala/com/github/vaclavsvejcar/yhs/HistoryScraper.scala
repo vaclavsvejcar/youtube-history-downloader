@@ -8,6 +8,7 @@ import net.ruippeixotog.scalascraper.browser.JsoupBrowser.JsoupDocument
 import net.ruippeixotog.scalascraper.dsl.DSL.Extract._
 import net.ruippeixotog.scalascraper.dsl.DSL._
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import wvlet.log.LogSupport
 
 import scala.annotation.tailrec
@@ -90,11 +91,6 @@ class HistoryScraper(cookies: Map[String, String]) extends LogSupport {
       error("User is not logged in, exiting...")
       System.exit(1)
     }
-  }
-
-
-  private def csvRow(videoRef: VideoRef): String = {
-    videoRef.id + "," + videoRef.title + "\n"
   }
 
   private def initBrowser(): CustomBrowser = {
