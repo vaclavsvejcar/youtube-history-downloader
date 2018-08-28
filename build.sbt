@@ -11,9 +11,20 @@ libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-json" % "2.6.7",
   "org.wvlet.airframe" %% "airframe-log" % "0.56",
   "com.github.scopt" %% "scopt" % "3.7.0",
+  "com.github.mpilquist" %% "simulacrum" % "0.13.0",
 
   // TEST dependencies
   "com.lihaoyi" %% "utest" % "0.6.3" % "test"
 )
 
 testFrameworks += new TestFramework("utest.runner.Framework")
+
+addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
+
+scalacOptions ++= Seq(
+  "-feature",
+  "-language:existentials",
+  "-language:experimental.macros",
+  "-language:higherKinds",
+  "-language:implicitConversions",
+)

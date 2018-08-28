@@ -1,7 +1,5 @@
 package com.github.vaclavsvejcar.yhs
 
-import java.io.PrintWriter
-
 import net.ruippeixotog.scalascraper.browser.JsoupBrowser.JsoupDocument
 import net.ruippeixotog.scalascraper.dsl.DSL.Extract._
 import net.ruippeixotog.scalascraper.dsl.DSL._
@@ -33,31 +31,30 @@ class HistoryScraper(cookies: Map[String, String]) extends LogSupport {
     }
 
     val sessionToken = parseSessionToken(document.toHtml)
-    val writer = new PrintWriter(filename)
 
-    @tailrec def next(nextToken: Option[String], iteration: Int, total: Int): Unit = {
-      nextToken match {
-        case Some(token) =>
-          val (newToken, videos) = fetchNext(token, sessionToken)
-          val newIteration = iteration + 1
-          val newTotal = total + videos.size
+    withCloseable(new CsvWriter[VideoRef](filename)) { writer =>
+      @tailrec def next(nextToken: Option[String], iteration: Int, total: Int): Unit = {
+        nextToken match {
+          case Some(token) =>
+            val (newToken, videos) = fetchNext(token, sessionToken)
+            val newIteration = iteration + 1
+            val newTotal = total + videos.size
 
-          info(s"Iteration $newIteration - writing down next ${videos.size} videos (total $newTotal videos until now)")
-          videos.foreach(video => writer.write(csvRow(video)))
+            info(s"Iteration $newIteration - writing down next ${videos.size} videos (total $newTotal videos until now)")
+            videos.foreach(writer.writeRow)
 
-          next(newToken, iteration + 1, total + videos.size)
-        case None =>
-          info(s"No more videos to fetch, total $total videos fetched in $iteration iterations")
+            next(newToken, iteration + 1, total + videos.size)
+          case None =>
+            info(s"No more videos to fetch, total $total videos fetched in $iteration iterations")
+        }
       }
+
+      val firstPageVideos = parseVideoRefs(document)
+      info(s"Iteration 1 - writing down initial list of videos (total ${firstPageVideos.size})")
+      firstPageVideos.foreach(writer.writeRow)
+
+      next(nextPageCToken(document), 1, firstPageVideos.size)
     }
-
-
-    val firstPageVideos = parseVideoRefs(document)
-    info(s"Iteration 1 - writing down initial list of videos (total ${firstPageVideos.size})")
-    firstPageVideos.foreach(video => writer.write(csvRow(video)))
-
-    next(nextPageCToken(document), 1, firstPageVideos.size)
-    writer.close()
   }
 
   private def fetchNext(cToken: String, sessionToken: String): (Option[String], Seq[VideoRef]) = {
