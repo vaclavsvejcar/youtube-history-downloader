@@ -12,6 +12,7 @@ libraryDependencies ++= Seq(
   "org.wvlet.airframe" %% "airframe-log" % "0.56",
   "com.github.scopt" %% "scopt" % "3.7.0",
   "com.github.mpilquist" %% "simulacrum" % "0.13.0",
+  "com.nrinaudo" %% "kantan.csv-generic" % "0.4.0",
 
   // TEST dependencies
   "com.lihaoyi" %% "utest" % "0.6.3" % "test"

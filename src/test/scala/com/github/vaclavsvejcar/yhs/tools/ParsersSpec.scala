@@ -58,13 +58,26 @@ object ParsersSpec extends TestSuite {
     }
 
     'testParseVideoRefs - {
-      val source = Source.fromResource("single-video-snippet.html").getLines().mkString("\n")
-      val document = JsoupDocument(Jsoup.parse(source))
-      val expected = VideoRef("aabbccdd", "The Video Title")
+      'testRemovedVideo - {
+        val source = Source.fromResource("removed-video-snippet.html").getLines().mkString("\n")
+        val document = JsoupDocument(Jsoup.parse(source))
+        val expected = VideoRef("aabbccdd", "The Video Title", None)
 
-      val results = parseVideoRefs(document)
-      results.size ==> 1
-      results.head ==> expected
+        val results = parseVideoRefs(document)
+        results.size ==> 1
+        results.head ==> expected
+      }
+
+      'testExistingVideo - {
+        val source = Source.fromResource("video-snippet.html").getLines().mkString("\n")
+        val document = JsoupDocument(Jsoup.parse(source))
+        val expected = VideoRef("aabbccdd", "The Video Title", Some("The Video Description"))
+
+        val results = parseVideoRefs(document)
+        results.size ==> 1
+        results.head ==> expected
+      }
+
     }
 
   }

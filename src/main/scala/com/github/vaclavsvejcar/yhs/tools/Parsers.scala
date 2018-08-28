@@ -46,8 +46,9 @@ object Parsers {
     (document >> elementList(".yt-lockup-video")).map { video =>
       val id = video >> attr("data-context-item-id")
       val title = video >> element("a.yt-uix-tile-link") >> attr("title")
+      val desc = video >?> element(".yt-lockup-description") >> text
 
-      VideoRef(id, title)
+      VideoRef(id, title, desc)
     }
   }
 }

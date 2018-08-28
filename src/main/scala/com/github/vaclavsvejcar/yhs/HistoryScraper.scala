@@ -1,5 +1,9 @@
 package com.github.vaclavsvejcar.yhs
 
+import java.io.File
+
+import com.github.vaclavsvejcar.yhs.tools.Resource
+import kantan.csv.CsvWriter
 import net.ruippeixotog.scalascraper.browser.JsoupBrowser.JsoupDocument
 import net.ruippeixotog.scalascraper.dsl.DSL.Extract._
 import net.ruippeixotog.scalascraper.dsl.DSL._
@@ -23,16 +27,21 @@ class HistoryScraper(cookies: Map[String, String]) extends LogSupport {
   private val browser = initBrowser()
 
   def fetchHistory(filename: String = "ytb_history.csv"): Unit = {
+    import kantan.csv._
+    import kantan.csv.ops._
+
     val document = browser.get(Url.history)
 
-    if (!isLoggedIn(document)) {
-      error("User is not logged in, exiting...")
-      System.exit(1) // FIXME handle this better
-    }
+    // no sense to continue if not logged in, abort
+    exitIfNotLoggedIn(document)
 
+    // parse the session token
     val sessionToken = parseSessionToken(document.toHtml)
 
-    withCloseable(new CsvWriter[VideoRef](filename)) { writer =>
+    val csvWriter = new File(filename).asCsvWriter[VideoRef](rfc.withHeader(
+      "id", "title", "description"))
+
+    tools.withResource(csvWriter) { writer =>
       @tailrec def next(nextToken: Option[String], iteration: Int, total: Int): Unit = {
         nextToken match {
           case Some(token) =>
@@ -41,7 +50,7 @@ class HistoryScraper(cookies: Map[String, String]) extends LogSupport {
             val newTotal = total + videos.size
 
             info(s"Iteration $newIteration - writing down next ${videos.size} videos (total $newTotal videos until now)")
-            videos.foreach(writer.writeRow)
+            videos.foreach(writer.write)
 
             next(newToken, iteration + 1, total + videos.size)
           case None =>
@@ -51,7 +60,7 @@ class HistoryScraper(cookies: Map[String, String]) extends LogSupport {
 
       val firstPageVideos = parseVideoRefs(document)
       info(s"Iteration 1 - writing down initial list of videos (total ${firstPageVideos.size})")
-      firstPageVideos.foreach(writer.writeRow)
+      firstPageVideos.foreach(writer.write)
 
       next(nextPageCToken(document), 1, firstPageVideos.size)
     }
@@ -76,9 +85,13 @@ class HistoryScraper(cookies: Map[String, String]) extends LogSupport {
       parseCToken(doc >> element(".load-more-button") >> attr("data-uix-load-more-href"))
     ).toOption
 
-  // FIXME really really naive stupid implementation, but works for testing purposes
-  private def isLoggedIn(document: JsoupDocument): Boolean =
-    document.toHtml.contains("yt-masthead-picker-name")
+  private def exitIfNotLoggedIn(document: JsoupDocument): Unit = {
+    if (!document.toHtml.contains("yt-masthead-picker-name")) {
+      error("User is not logged in, exiting...")
+      System.exit(1)
+    }
+  }
+
 
   private def csvRow(videoRef: VideoRef): String = {
     videoRef.id + "," + videoRef.title + "\n"
@@ -89,6 +102,9 @@ class HistoryScraper(cookies: Map[String, String]) extends LogSupport {
     browser.setCookies("/", cookies)
     browser
   }
+
+  private implicit def csvWriterResource[T]: Resource[CsvWriter[T]] =
+    (resource: CsvWriter[T]) => resource.close
 }
 
 
