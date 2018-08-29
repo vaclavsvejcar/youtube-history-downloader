@@ -1,7 +1,5 @@
 package com.github.vaclavsvejcar.yhs
 
-import java.io.File
-
 import com.github.vaclavsvejcar.yhs.tools.Resource
 import kantan.csv.CsvWriter
 import net.ruippeixotog.scalascraper.browser.JsoupBrowser.JsoupDocument
@@ -13,7 +11,7 @@ import wvlet.log.LogSupport
 import scala.annotation.tailrec
 import scala.util.Try
 
-class HistoryScraper(cookies: Map[String, String]) extends LogSupport {
+class HistoryScraper(cookies: Map[String, String], config: Config) extends LogSupport {
 
   import com.github.vaclavsvejcar.yhs.tools.Parsers._
 
@@ -26,7 +24,7 @@ class HistoryScraper(cookies: Map[String, String]) extends LogSupport {
 
   private val browser = initBrowser()
 
-  def fetchHistory(filename: String = "ytb_history.csv"): Unit = {
+  def fetchAndSave(): Unit = {
     import kantan.csv._
     import kantan.csv.ops._
 
@@ -38,7 +36,7 @@ class HistoryScraper(cookies: Map[String, String]) extends LogSupport {
     // parse the session token
     val sessionToken = parseSessionToken(document.toHtml)
 
-    val csvWriter = new File(filename).asCsvWriter[VideoRef](rfc.withHeader)
+    val csvWriter = config.outputCsv.asCsvWriter[VideoRef](rfc.withHeader)
 
     tools.withResource(csvWriter) { writer =>
       @tailrec def next(nextToken: Option[String], iteration: Int, total: Int): Unit = {

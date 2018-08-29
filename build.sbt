@@ -13,6 +13,7 @@ libraryDependencies ++= Seq(
   "com.github.scopt" %% "scopt" % "3.7.0",
   "com.github.mpilquist" %% "simulacrum" % "0.13.0",
   "com.nrinaudo" %% "kantan.csv-generic" % "0.4.0",
+  "com.beachape" %% "enumeratum" % "1.5.13",
 
   // TEST dependencies
   "com.lihaoyi" %% "utest" % "0.6.3" % "test"

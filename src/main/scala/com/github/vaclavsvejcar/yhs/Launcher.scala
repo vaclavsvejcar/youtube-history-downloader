@@ -11,14 +11,19 @@ object Launcher extends App with LogSupport {
 
   Logger.setDefaultFormatter(BareFormatter)
 
-  val CookiesFile = "cookies.txt"
-
-  info("-- Welcome to the Youtube History Scrapper --")
-
-  info(s"Parsing Youtube cookies from '$CookiesFile'...")
-  Try(Source.fromFile(CookiesFile).getLines().mkString("\n")).map(Parsers.parseCookies) match {
-    case Success(cookies) => new HistoryScraper(cookies).fetchHistory()
-    case Failure(ex) =>
-      println(s"Cannot read file '$CookiesFile' with Youtube cookies (reason: $ex)")
+  info("-- Welcome to the Youtube History Scraper (YHS) --")
+  Config.parse(args: _*) foreach { config =>
+    config.mode match {
+      case Mode.Fetch =>
+        info(s"Parsing Youtube cookies from '${config.cookies.getName}'...")
+        val rawCookies = Try(Source.fromFile(config.cookies).getLines().mkString("\n"))
+        rawCookies.map(Parsers.parseCookies) match {
+          case Success(cookies) => new HistoryScraper(cookies, config).fetchAndSave()
+          case Failure(ex) => println(
+            s"Cannot read file '${config.cookies.getName}' with Youtube cookies (reason: $ex)")
+        }
+      case Mode.Other =>
+        error("No mode specified (run with --help to see possible options)")
+    }
   }
 }
