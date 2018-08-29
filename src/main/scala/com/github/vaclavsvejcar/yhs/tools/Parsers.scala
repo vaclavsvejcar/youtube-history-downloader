@@ -47,8 +47,11 @@ object Parsers {
       val id = video >> attr("data-context-item-id")
       val title = video >> element("a.yt-uix-tile-link") >> attr("title")
       val desc = video >?> element(".yt-lockup-description") >> text
+      val userElem = video >> element(".yt-lockup-byline > a")
+      val user = userElem >> text
+      val userLink = userElem >> attr("href")
 
-      VideoRef(id, title, desc)
+      VideoRef(id, title, desc, user, userLink)
     }
   }
 }

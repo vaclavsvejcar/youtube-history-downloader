@@ -8,7 +8,6 @@ import net.ruippeixotog.scalascraper.browser.JsoupBrowser.JsoupDocument
 import net.ruippeixotog.scalascraper.dsl.DSL.Extract._
 import net.ruippeixotog.scalascraper.dsl.DSL._
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
 import wvlet.log.LogSupport
 
 import scala.annotation.tailrec
@@ -39,8 +38,7 @@ class HistoryScraper(cookies: Map[String, String]) extends LogSupport {
     // parse the session token
     val sessionToken = parseSessionToken(document.toHtml)
 
-    val csvWriter = new File(filename).asCsvWriter[VideoRef](rfc.withHeader(
-      "id", "title", "description"))
+    val csvWriter = new File(filename).asCsvWriter[VideoRef](rfc.withHeader)
 
     tools.withResource(csvWriter) { writer =>
       @tailrec def next(nextToken: Option[String], iteration: Int, total: Int): Unit = {
