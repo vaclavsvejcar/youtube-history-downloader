@@ -13,12 +13,17 @@ import scala.io.Source
 
 class ReportGenerator(config: Config) extends LogSupport {
 
+  private val LargeReportThreshold = 5000
+
   def generateAndWrite(): Unit = {
     info(s"Generating HTML report into '${config.report.getName}'...")
     val videoRefs = parseHistory()
-    val template = render(videoRefs)
+    val template = render(createReport(videoRefs))
 
     info(s"Processing ${videoRefs.size} records...")
+    if (videoRefs.size > LargeReportThreshold) {
+      warn("Your watching history is quite large. It may take a while to open the report in web browser.")
+    }
     withResource(
       new OutputStreamWriter(new FileOutputStream(config.report), StandardCharsets.UTF_8)
     )(_.write(template))
@@ -35,8 +40,14 @@ class ReportGenerator(config: Config) extends LogSupport {
     }
   }
 
-  private def render(videos: Seq[VideoRef]): String =
-    com.github.vaclavsvejcar.yhs.templates.html.report(videos).toString()
+  private def createReport(videos: Seq[VideoRef]): ReportData = {
+    val uniqueNo = videos.distinct.size
+
+    ReportData(videos, uniqueNo)
+  }
+
+  private def render(data: ReportData): String =
+    com.github.vaclavsvejcar.yhs.templates.html.report(data).toString()
 
   private implicit def writerResource[T <: Writer]: Resource[T] =
     (resource: Writer) => resource.close()

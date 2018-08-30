@@ -1,4 +1,4 @@
-@(videos: Seq[com.github.vaclavsvejcar.yhs.VideoRef])
+@(data: com.github.vaclavsvejcar.yhs.report.ReportData)
 <!DOCTYPE html>
 <html>
   <head>
@@ -75,13 +75,17 @@
               max-width: 1000px;
             }
 
-            .content p.summary {
+            .content .summary {
               margin-bottom: 50px;
             }
 
-            .content p.summary strong {
+            .content .summary strong {
               color: #b71c1c;
               font-weight: bold;
+            }
+
+            .content .summary ul {
+              font-size: 0.9em;
             }
 
             .content ul.videos {
@@ -106,7 +110,7 @@
 
             .content ul.videos li.video h1 {
               margin: 0;
-              font-size: 1.5em;
+              font-size: 1.2em;
             }
 
             .content ul.videos li.video p {
@@ -137,9 +141,14 @@
       </div>
     </header>
     <div class="content">
-      <p class="summary">Your YouTube watching history contains <strong>@videos.size</strong> videos.</p>
+      <div class="summary">
+        <div>Your history consists of <strong>@data.videos.size</strong> videos views.</div>
+        <ul>
+          <li>of which <strong>@data.uniqueNo</strong> are unique videos</li>
+        </ul>
+      </div>
       <ul class="videos">
-        @for(video <- videos) {
+        @for(video <- data.videos) {
           @com.github.vaclavsvejcar.yhs.templates.includes.html.video(video)
         }
       </ul>
