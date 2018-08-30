@@ -2,6 +2,8 @@
 
 Have you ever wanted to see your full YouTube watching history, but found out that YouTube doesn't allow you to do that? Scrolling down the history more than few days back would be really a awful experience. Fortunately, here comes the _Youtube History Downloader_, small tool written in [Scala](https://www.scala-lang.org), that allows you to fetch your entire history within few minutes!
 
+> Please note this tool is still in development, so it might not work 100% and some functionality and documentation might be missing.
+
 ## Main Features
 - multiplatform (running on [Java](https://java.com/en/), supports _macOS_, _Windows_, _GNU/Linux_)
 - downloads history into _CSV_ file
@@ -23,7 +25,7 @@ In order that _Youtube History Downloader_ can fetch your _YouTube_ history, you
 1. Enter SBT console: `$ sbt`
 1. Fetch the history using the `> run fetch` command. This will save the history data into the `history.csv` file. Now you can open this file in your favorite CSV editor, or generate the HTML report.
 1. You can generate the HTML report using `> run report` command. This will generate HTML file `report.html`.
-   > Please note that for large history files, opening the report in web browser may take some while.
+   > Please note that for large history files, opening the report in web browser may take some time.
 
 <p align="center"><img src ="https://raw.githubusercontent.com/vaclavsvejcar/ytb-history-downloader/master/readme-data/screenshot.jpg" /></p>
 
