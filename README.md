@@ -34,6 +34,22 @@ In order that _Youtube History Downloader_ can fetch your _YouTube_ history, you
 
 <p align="center"><img src ="https://raw.githubusercontent.com/vaclavsvejcar/ytb-history-downloader/master/readme-data/screenshot.jpg" /></p>
 
+## Command line options
+You can get the list of bellow option either by running the `java -jar yhd.jar --help` (binary) or `run --help` (SBT):
+
+```
+Usage: yhd [fetch|report] [options]
+
+  --help                   Prints this help text
+Command: fetch [options]
+Fetches the youtube history into the output CSV file
+  -c, --cookies <file>     file containing the copied Youtube cookies (default: cookies.txt)
+  -o, --output <file>      Output CSV file with Youtube history (default: history.csv)
+Command: report [options]
+Generates pretty HTML report from the previously fetched CSV file
+  -o, --output <file>      Output HTML file with the generated report (default: report.html)
+```
+
 ## Run from production binaries
 > coming soon!
 
