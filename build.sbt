@@ -6,6 +6,8 @@ scalaVersion := "2.12.6"
 
 mainClass in(Compile, run) := Some("com.github.vaclavsvejcar.yhd.Launcher")
 
+assemblyJarName in assembly := "yhd.jar"
+
 libraryDependencies ++= Seq(
   "net.ruippeixotog" %% "scala-scraper" % "2.1.0",
   "com.typesafe.play" %% "play-json" % "2.6.7",

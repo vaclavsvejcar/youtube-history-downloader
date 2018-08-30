@@ -27,6 +27,7 @@ class ReportGenerator(config: Config) extends LogSupport {
     withResource(
       new OutputStreamWriter(new FileOutputStream(config.report), StandardCharsets.UTF_8)
     )(_.write(template))
+    info(s"Report successfully generated, now open following file in web browser: ${config.report.getAbsolutePath}")
   }
 
   private def parseHistory(): Seq[VideoRef] = {

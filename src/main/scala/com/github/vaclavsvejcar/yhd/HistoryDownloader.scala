@@ -52,6 +52,7 @@ class HistoryDownloader(cookies: Map[String, String], config: Config) extends Lo
             next(newToken, iteration + 1, total + videos.size)
           case None =>
             info(s"No more videos to fetch, total $total videos fetched in $iteration iterations")
+            info(s"Successfully saved to: ${config.history.getAbsolutePath}")
         }
       }
 
