@@ -1,10 +1,10 @@
-package com.github.vaclavsvejcar.yhs.report
+package com.github.vaclavsvejcar.yhd.report
 
 import java.io.{FileOutputStream, OutputStreamWriter, Writer}
 import java.nio.charset.StandardCharsets
 
-import com.github.vaclavsvejcar.yhs.tools.{Resource, withResource}
-import com.github.vaclavsvejcar.yhs.{Config, VideoRef, abort}
+import com.github.vaclavsvejcar.yhd.tools.{Resource, withResource}
+import com.github.vaclavsvejcar.yhd.{Config, VideoRef, abort}
 import kantan.csv._
 import kantan.csv.ops._
 import wvlet.log.LogSupport
@@ -47,7 +47,7 @@ class ReportGenerator(config: Config) extends LogSupport {
   }
 
   private def render(data: ReportData): String =
-    com.github.vaclavsvejcar.yhs.templates.html.report(data).toString()
+    com.github.vaclavsvejcar.yhd.templates.html.report(data).toString()
 
   private implicit def writerResource[T <: Writer]: Resource[T] =
     (resource: Writer) => resource.close()

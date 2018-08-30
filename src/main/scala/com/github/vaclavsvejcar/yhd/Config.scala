@@ -1,4 +1,4 @@
-package com.github.vaclavsvejcar.yhs
+package com.github.vaclavsvejcar.yhd
 
 import java.io.File
 
@@ -29,7 +29,7 @@ object Config {
 
   def parse(args: String*): Option[Config] = parser.parse(args, Default)
 
-  private def parser: OptionParser[Config] = new scopt.OptionParser[Config]("yhs") {
+  private def parser: OptionParser[Config] = new scopt.OptionParser[Config]("yhd") {
     help("help").text("Prints this help text")
 
     cmd("fetch").action((_, c) => c.copy(mode = Mode.Fetch))

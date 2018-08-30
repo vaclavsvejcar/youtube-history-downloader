@@ -1,4 +1,4 @@
-package com.github.vaclavsvejcar.yhs
+package com.github.vaclavsvejcar.yhd
 
 import kantan.csv.HeaderCodec
 

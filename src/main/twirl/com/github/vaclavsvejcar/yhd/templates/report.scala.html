@@ -1,9 +1,9 @@
-@(data: com.github.vaclavsvejcar.yhs.report.ReportData)
+@(data: com.github.vaclavsvejcar.yhd.report.ReportData)
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8"/>
-    <title>Youtube History Scraper - report</title>
+    <title>Youtube History Downloader - report</title>
 
     <link href="https://fonts.googleapis.com/css?family=Raleway&amp;subset=latin-ext"
     rel="stylesheet">
@@ -145,11 +145,11 @@
   </head>
   <body>
     <header>
-      <div class="left">Youtube History Scraper</div>
+      <div class="left">Youtube History Downloader</div>
       <div class="right">
         <ul>
           <li>
-            <a href="https://github.com/vaclavsvejcar/ytb-history-scraper">
+            <a href="https://github.com/vaclavsvejcar/ytb-history-downloader" target="_blank">
               <i class="fab fa-github"></i>
             </a>
           </li>
@@ -165,7 +165,7 @@
       </div>
       <ul class="videos">
         @for(video <- data.videos) {
-          @com.github.vaclavsvejcar.yhs.templates.includes.html.video(video)
+          @com.github.vaclavsvejcar.yhd.templates.includes.html.video(video)
         }
       </ul>
     </div>

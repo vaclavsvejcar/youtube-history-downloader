@@ -1,6 +1,6 @@
-package com.github.vaclavsvejcar.yhs
+package com.github.vaclavsvejcar.yhd
 
-import com.github.vaclavsvejcar.yhs.tools.Resource
+import com.github.vaclavsvejcar.yhd.tools.Resource
 import kantan.csv.CsvWriter
 import net.ruippeixotog.scalascraper.browser.JsoupBrowser.JsoupDocument
 import net.ruippeixotog.scalascraper.dsl.DSL.Extract._
@@ -11,9 +11,9 @@ import wvlet.log.LogSupport
 import scala.annotation.tailrec
 import scala.util.Try
 
-class HistoryScraper(cookies: Map[String, String], config: Config) extends LogSupport {
+class HistoryDownloader(cookies: Map[String, String], config: Config) extends LogSupport {
 
-  import com.github.vaclavsvejcar.yhs.tools.Parsers._
+  import com.github.vaclavsvejcar.yhd.tools.Parsers._
 
   private object Url {
     val root = "https://youtube.com"

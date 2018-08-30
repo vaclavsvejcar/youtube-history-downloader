@@ -1,6 +1,6 @@
-package com.github.vaclavsvejcar.yhs.tools
+package com.github.vaclavsvejcar.yhd.tools
 
-import com.github.vaclavsvejcar.yhs.VideoRef
+import com.github.vaclavsvejcar.yhd.VideoRef
 import net.ruippeixotog.scalascraper.browser.JsoupBrowser.JsoupDocument
 
 import scala.util.matching.Regex

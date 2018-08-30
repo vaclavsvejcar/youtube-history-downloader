@@ -1,4 +1,4 @@
-package com.github.vaclavsvejcar.yhs
+package com.github.vaclavsvejcar.yhd
 
 import java.io.{File, InputStream}
 

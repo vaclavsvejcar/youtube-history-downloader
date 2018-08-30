@@ -1,10 +1,10 @@
-name := "ytb-history-scraper"
+name := "ytb-history-downloader"
 
 version := "0.1.0-SNAPSHOT"
 
 scalaVersion := "2.12.6"
 
-mainClass in(Compile, run) := Some("com.github.vaclavsvejcar.yhs.Launcher")
+mainClass in(Compile, run) := Some("com.github.vaclavsvejcar.yhd.Launcher")
 
 libraryDependencies ++= Seq(
   "net.ruippeixotog" %% "scala-scraper" % "2.1.0",

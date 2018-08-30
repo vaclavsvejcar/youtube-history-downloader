@@ -1,4 +1,4 @@
-package com.github.vaclavsvejcar.yhs.tools
+package com.github.vaclavsvejcar.yhd.tools
 
 import simulacrum.typeclass
 
