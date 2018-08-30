@@ -1,4 +1,4 @@
-# ytb-history-downloader
+# YouTube History Downloader
 
 Have you ever wanted to see your full YouTube watching history, but found out that YouTube doesn't allow you to do that? Scrolling down the history more than few days back would be really a awful experience. Fortunately, here comes the _Youtube History Downloader_, small tool written in [Scala](https://www.scala-lang.org), that allows you to fetch your entire history within few minutes!
 
