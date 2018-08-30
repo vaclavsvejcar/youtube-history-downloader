@@ -9,6 +9,11 @@ Have you ever wanted to see your full YouTube watching history, but found out th
 - downloads history into _CSV_ file
 - generates fancy _HTML_ report from the _CSV_ file
 
+## Planned Features
+- proper GUI to make it more friendly for people without command-line knowledge
+- refactor the main logic as a proper library so you can use it in your code
+- improve the HTML report (more options, better performance)
+
 ## Get the YouTube cookies
 In order that _Youtube History Downloader_ can fetch your _YouTube_ history, you must copy the _YouTube_-related cookies from your web browser into the `cookies.txt` file placed inside the project main directory. Here are steps how to do it:
 
