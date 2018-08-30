@@ -36,7 +36,7 @@ class HistoryScraper(cookies: Map[String, String], config: Config) extends LogSu
     // parse the session token
     val sessionToken = parseSessionToken(document.toHtml)
 
-    val csvWriter = config.outputCsv.asCsvWriter[VideoRef](rfc.withHeader)
+    val csvWriter = config.history.asCsvWriter[VideoRef](rfc.withHeader)
 
     tools.withResource(csvWriter) { writer =>
       @tailrec def next(nextToken: Option[String], iteration: Int, total: Int): Unit = {

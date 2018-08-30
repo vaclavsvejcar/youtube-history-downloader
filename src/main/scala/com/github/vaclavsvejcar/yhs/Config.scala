@@ -14,13 +14,15 @@ object Mode extends Enum[Mode] {
   override def values: immutable.IndexedSeq[Mode] = findValues
 
   case object Fetch extends Mode
+  case object Report extends Mode
   case object Other extends Mode
 
 }
 
 case class Config(mode: Mode = Mode.Other,
                   cookies: File = new File("cookies.txt"),
-                  outputCsv: File = new File("history.csv"))
+                  history: File = new File("history.csv"),
+                  report: File = new File("report.html"))
 
 object Config {
   val Default: Config = Config()
@@ -35,8 +37,15 @@ object Config {
       .children(
         opt[File]('c', "cookies").valueName("<file>").action((x, c) => c.copy(cookies = x))
           .text(s"file containing the copied Youtube cookies (default: ${Default.cookies.getName})"),
-        opt[File]('o', "output").valueName("<file>").action((x, c) => c.copy(outputCsv = x))
-          .text(s"Output CSV file with Youtube history (default: ${Default.outputCsv.getName})")
+        opt[File]('o', "output").valueName("<file>").action((x, c) => c.copy(history = x))
+          .text(s"Output CSV file with Youtube history (default: ${Default.history.getName})")
+      )
+
+    cmd("report").action((_, c) => c.copy(mode = Mode.Report))
+      .text("Generates pretty HTML report from the previously fetched CSV file")
+      .children(
+        opt[File]('o', "output").valueName("<file>").action((x, c) => c.copy(report = x))
+          .text(s"Output HTML file with the generated report (default: ${Default.report.getName})")
       )
   }
 }

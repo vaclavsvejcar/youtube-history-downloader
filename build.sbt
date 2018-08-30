@@ -14,6 +14,7 @@ libraryDependencies ++= Seq(
   "com.github.mpilquist" %% "simulacrum" % "0.13.0",
   "com.nrinaudo" %% "kantan.csv-generic" % "0.4.0",
   "com.beachape" %% "enumeratum" % "1.5.13",
+  "org.typelevel" %% "cats-core" % "1.2.0",
 
   // TEST dependencies
   "com.lihaoyi" %% "utest" % "0.6.3" % "test"
@@ -22,6 +23,9 @@ libraryDependencies ++= Seq(
 testFrameworks += new TestFramework("utest.runner.Framework")
 
 addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
+addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.7")
+
+enablePlugins(SbtTwirl)
 
 scalacOptions ++= Seq(
   "-feature",
@@ -29,6 +33,7 @@ scalacOptions ++= Seq(
   "-language:experimental.macros",
   "-language:higherKinds",
   "-language:implicitConversions",
+  "-Ypartial-unification",
   "-Ywarn-dead-code",
   "-Ywarn-unused:implicits",
   "-Ywarn-unused:imports",

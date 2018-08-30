@@ -1,5 +1,6 @@
 package com.github.vaclavsvejcar.yhs
 
+import com.github.vaclavsvejcar.yhs.report.ReportGenerator
 import com.github.vaclavsvejcar.yhs.tools.Parsers
 import wvlet.log.LogFormatter.BareFormatter
 import wvlet.log.{LogSupport, Logger}
@@ -22,6 +23,8 @@ object Launcher extends App with LogSupport {
           case Failure(ex) => println(
             s"Cannot read file '${config.cookies.getName}' with Youtube cookies (reason: $ex)")
         }
+      case Mode.Report =>
+        new ReportGenerator(config).generateAndWrite()
       case Mode.Other =>
         error("No mode specified (run with --help to see possible options)")
     }
