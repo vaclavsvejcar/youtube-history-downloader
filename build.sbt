@@ -69,15 +69,15 @@ lazy val assemblySettings = Seq(
 lazy val dependencies = new {
 
   object Version {
-    val airframe = "0.64"
-    val cats = "1.3.1"
+    val airframe = "0.65"
+    val cats = "1.4.0"
     val enumeratum = "1.5.13"
     val kantanCsv = "0.4.0"
     val playJson = "2.6.10"
     val scalaScraper = "2.1.0"
     val simulacrum = "0.13.0"
     val scopt = "3.7.0"
-    val utest = "0.6.4"
+    val utest = "0.6.5"
   }
 
   val airframeLog = "org.wvlet.airframe" %% "airframe-log" % Version.airframe
