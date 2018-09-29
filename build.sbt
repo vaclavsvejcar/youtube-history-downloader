@@ -1,7 +1,7 @@
 name := "yhd"
 organization in ThisBuild := "com.github.vaclavsvejcar.yhd"
 version in ThisBuild := "0.1.0-SNAPSHOT"
-scalaVersion in ThisBuild := "2.12.6"
+scalaVersion in ThisBuild := "2.12.7"
 
 lazy val root = (project in file("."))
   .settings(settings)
@@ -69,7 +69,7 @@ lazy val assemblySettings = Seq(
 lazy val dependencies = new {
 
   object Version {
-    val airframe = "0.65"
+    val airframe = "0.67"
     val cats = "1.4.0"
     val enumeratum = "1.5.13"
     val kantanCsv = "0.4.0"
@@ -77,7 +77,7 @@ lazy val dependencies = new {
     val scalaScraper = "2.1.0"
     val simulacrum = "0.13.0"
     val scopt = "3.7.0"
-    val utest = "0.6.5"
+    val utest = "0.6.6"
   }
 
   val airframeLog = "org.wvlet.airframe" %% "airframe-log" % Version.airframe
