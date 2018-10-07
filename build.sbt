@@ -55,7 +55,7 @@ lazy val commonSettings = Seq(
     "-Ywarn-unused:privates",
   ),
   addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full),
-  addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.7")
+  addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.8")
 )
 
 lazy val assemblySettings = Seq(
@@ -69,7 +69,7 @@ lazy val assemblySettings = Seq(
 lazy val dependencies = new {
 
   object Version {
-    val airframe = "0.67"
+    val airframe = "0.69"
     val cats = "1.4.0"
     val enumeratum = "1.5.13"
     val kantanCsv = "0.4.0"
