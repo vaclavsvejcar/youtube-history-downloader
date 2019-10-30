@@ -1,4 +1,4 @@
-<p align="center"><img src ="https://github.com/norcane/ytb-history-downloader/blob/master/readme-data/logo.png?raw=true" width="200" /></p>
+<p align="center"><img src ="https://github.com/vaclavsvejcar/ytb-history-downloader/blob/master/readme-data/logo.png?raw=true" width="200" /></p>
 
 # YouTube History Downloader
 
