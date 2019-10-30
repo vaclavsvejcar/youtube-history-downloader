@@ -36,7 +36,8 @@ object ParsersSpec extends TestSuite {
 
     test("testParseCToken") {
       val expected = "theToken"
-      val raw = s"/browse_ajax?action_continuation=1&direct_render=1&target_id=item-section-102652&continuation=$expected&foo=bar"
+      val raw =
+        s"/browse_ajax?action_continuation=1&direct_render=1&target_id=item-section-102652&continuation=$expected&foo=bar"
 
       parseCToken(raw) ==> expected
     }
@@ -59,10 +60,9 @@ object ParsersSpec extends TestSuite {
 
     test("testParseVideoRefs") {
       test("testRemovedVideo") {
-        val source = Source.fromResource("removed-video-snippet.html").getLines().mkString("\n")
+        val source   = Source.fromResource("removed-video-snippet.html").getLines().mkString("\n")
         val document = JsoupDocument(Jsoup.parse(source))
-        val expected = VideoRef("aabbccdd", "The Video Title", None,
-          "4:48", "John Smith", "/user/johnSmith")
+        val expected = VideoRef("aabbccdd", "The Video Title", None, "4:48", "John Smith", "/user/johnSmith")
 
         val results = parseVideoRefs(document)
         results.size ==> 1
@@ -70,10 +70,16 @@ object ParsersSpec extends TestSuite {
       }
 
       test("testExistingVideo") {
-        val source = Source.fromResource("existing-video-snippet.html").getLines().mkString("\n")
+        val source   = Source.fromResource("existing-video-snippet.html").getLines().mkString("\n")
         val document = JsoupDocument(Jsoup.parse(source))
-        val expected = VideoRef("aabbccdd", "The Video Title", Some("The Video Description"),
-          "8:09", "The Channel Name", "/channel/theChannel")
+        val expected = VideoRef(
+          "aabbccdd",
+          "The Video Title",
+          Some("The Video Description"),
+          "8:09",
+          "The Channel Name",
+          "/channel/theChannel"
+        )
 
         val results = parseVideoRefs(document)
         results.size ==> 1

@@ -12,8 +12,7 @@ import org.jsoup.{Connection, Jsoup}
 import scala.collection.JavaConverters._
 import scala.collection.mutable
 
-class CustomBrowser(val userAgent: String = "jsoup/1.8",
-                    val proxy: java.net.Proxy = null) extends Browser {
+class CustomBrowser(val userAgent: String = "jsoup/1.8", val proxy: java.net.Proxy = null) extends Browser {
   type DocumentType = JsoupDocument
 
   private[this] val cookieMap = mutable.Map.empty[String, String]
@@ -31,7 +30,9 @@ class CustomBrowser(val userAgent: String = "jsoup/1.8",
     JsoupDocument(Jsoup.parse(html))
 
   def parseInputStream(inputStream: InputStream, charset: String): JsoupDocument =
-    using(inputStream) { _ => JsoupDocument(Jsoup.parse(inputStream, charset, "")) }
+    using(inputStream) { _ =>
+      JsoupDocument(Jsoup.parse(inputStream, charset, ""))
+    }
 
   def cookies(url: String): Map[String, String] = cookieMap.toMap
 
@@ -48,12 +49,13 @@ class CustomBrowser(val userAgent: String = "jsoup/1.8",
   def requestSettings(conn: Connection): Connection = conn
 
   protected[this] def defaultRequestSettings(conn: Connection): Connection =
-    conn.cookies(cookieMap.asJava).
-      userAgent(userAgent).
-      header("Accept", "text/html,application/xhtml+xml,application/xml").
-      header("Accept-Charset", "utf-8").
-      timeout(15000).
-      maxBodySize(0)
+    conn
+      .cookies(cookieMap.asJava)
+      .userAgent(userAgent)
+      .header("Accept", "text/html,application/xhtml+xml,application/xml")
+      .header("Accept-Charset", "utf-8")
+      .timeout(15000)
+      .maxBodySize(0)
 
   protected[this] def executeRequest(conn: Connection): Response =
     conn.execute()

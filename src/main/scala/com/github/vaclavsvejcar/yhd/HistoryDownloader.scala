@@ -16,7 +16,7 @@ class HistoryDownloader(cookies: Map[String, String], config: Config) extends Lo
   import com.github.vaclavsvejcar.yhd.tools.Parsers._
 
   private object Url {
-    val root = "https://youtube.com"
+    val root    = "https://youtube.com"
     val history = s"$root/feed/history"
 
     def continuation(cToken: String) = s"$root/browse_ajax?ctoken=$cToken&continuation=$cToken"
@@ -43,10 +43,12 @@ class HistoryDownloader(cookies: Map[String, String], config: Config) extends Lo
         nextToken match {
           case Some(token) =>
             val (newToken, videos) = fetchNext(token, sessionToken)
-            val newIteration = iteration + 1
-            val newTotal = total + videos.size
+            val newIteration       = iteration + 1
+            val newTotal           = total + videos.size
 
-            info(s"Iteration $newIteration - writing down next ${videos.size} videos (total $newTotal videos until now)")
+            info(
+              s"Iteration $newIteration - writing down next ${videos.size} videos (total $newTotal videos until now)"
+            )
             videos.foreach(writer.write)
 
             next(newToken, iteration + 1, total + videos.size)
@@ -66,14 +68,14 @@ class HistoryDownloader(cookies: Map[String, String], config: Config) extends Lo
 
   private def fetchNext(cToken: String, sessionToken: String): (Option[String], Seq[VideoRef]) = {
     import play.api.libs.json._
-    val url = Url.continuation(cToken)
+    val url      = Url.continuation(cToken)
     val response = browser.post(url, Map("session_token" -> sessionToken))
-    val json = Json.parse(response.body.text)
+    val json     = Json.parse(response.body.text)
 
     val loadMoreHtml = (json \ "load_more_widget_html").asOpt[String].map(Jsoup.parse)
-    val contentHtml = (json \ "content_html").asOpt[String].map(Jsoup.parse)
-    val nextCToken = loadMoreHtml.map(JsoupDocument).flatMap(nextPageCToken)
-    val videos = contentHtml.map(JsoupDocument).map(parseVideoRefs).getOrElse(Seq.empty)
+    val contentHtml  = (json \ "content_html").asOpt[String].map(Jsoup.parse)
+    val nextCToken   = loadMoreHtml.map(JsoupDocument).flatMap(nextPageCToken)
+    val videos       = contentHtml.map(JsoupDocument).map(parseVideoRefs).getOrElse(Seq.empty)
 
     (nextCToken, videos)
   }
@@ -99,5 +101,3 @@ class HistoryDownloader(cookies: Map[String, String], config: Config) extends Lo
   private implicit def csvWriterResource[T]: Resource[CsvWriter[T]] =
     (resource: CsvWriter[T]) => resource.close
 }
-
-

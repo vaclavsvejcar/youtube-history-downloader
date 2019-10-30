@@ -20,8 +20,8 @@ object Launcher extends App with LogSupport {
         val rawCookies = Try(Source.fromFile(config.cookies).getLines().mkString("\n"))
         rawCookies.map(Parsers.parseCookies) match {
           case Success(cookies) => new HistoryDownloader(cookies, config).fetchAndSave()
-          case Failure(ex) => println(
-            s"Cannot read file '${config.cookies.getName}' with Youtube cookies (reason: $ex)")
+          case Failure(ex) =>
+            println(s"Cannot read file '${config.cookies.getName}' with Youtube cookies (reason: $ex)")
         }
       case Mode.Report =>
         new ReportGenerator(config).generateAndWrite()

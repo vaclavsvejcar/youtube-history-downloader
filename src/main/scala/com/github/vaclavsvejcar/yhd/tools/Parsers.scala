@@ -43,13 +43,13 @@ object Parsers {
     import net.ruippeixotog.scalascraper.dsl.DSL._
 
     (document >> elementList(".yt-lockup-video")).map { video =>
-      val id = video >> attr("data-context-item-id")
+      val id    = video >> attr("data-context-item-id")
       val title = video >> element("a.yt-uix-tile-link") >> attr("title")
-      val desc = video >?> element(".yt-lockup-description") >> text
+      val desc  = video >?> element(".yt-lockup-description") >> text
       val duration = (video >> element(".video-time") >?> element("span") >> text)
         .getOrElse(video >> element(".video-time") >> text)
       val userElem = video >> element(".yt-lockup-byline > a")
-      val user = userElem >> text
+      val user     = userElem >> text
       val userLink = userElem >> attr("href")
 
       VideoRef(id, title, desc, duration, user, userLink)
