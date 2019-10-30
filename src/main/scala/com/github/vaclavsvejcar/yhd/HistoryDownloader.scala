@@ -1,7 +1,6 @@
 package com.github.vaclavsvejcar.yhd
 
-import com.github.vaclavsvejcar.yhd.tools.Resource
-import kantan.csv.CsvWriter
+import com.github.vaclavsvejcar.yhd.tools.Using
 import net.ruippeixotog.scalascraper.browser.JsoupBrowser.JsoupDocument
 import net.ruippeixotog.scalascraper.dsl.DSL.Extract._
 import net.ruippeixotog.scalascraper.dsl.DSL._
@@ -38,7 +37,7 @@ class HistoryDownloader(cookies: Map[String, String], config: Config) extends Lo
 
     val csvWriter = config.history.asCsvWriter[VideoRef](rfc.withHeader)
 
-    tools.withResource(csvWriter) { writer =>
+    Using(csvWriter) { writer =>
       @tailrec def next(nextToken: Option[String], iteration: Int, total: Int): Unit = {
         nextToken match {
           case Some(token) =>
@@ -46,9 +45,7 @@ class HistoryDownloader(cookies: Map[String, String], config: Config) extends Lo
             val newIteration       = iteration + 1
             val newTotal           = total + videos.size
 
-            info(
-              s"Iteration $newIteration - writing down next ${videos.size} videos (total $newTotal videos until now)"
-            )
+            info(s"Iteration $newIteration - writing down next ${videos.size} videos (total $newTotal videos)")
             videos.foreach(writer.write)
 
             next(newToken, iteration + 1, total + videos.size)
@@ -81,13 +78,11 @@ class HistoryDownloader(cookies: Map[String, String], config: Config) extends Lo
   }
 
   private def nextPageCToken(doc: JsoupDocument): Option[String] =
-    Try(
-      parseCToken(doc >> element(".load-more-button") >> attr("data-uix-load-more-href"))
-    ).toOption
+    Try(parseCToken(doc >> element(".load-more-button") >> attr("data-uix-load-more-href"))).toOption
 
   private def exitIfNotLoggedIn(document: JsoupDocument): Unit = {
     if (!document.toHtml.contains("yt-masthead-picker-name")) {
-      error("User is not logged in, exiting...")
+      error("Cannot login user using given cookies, exiting...")
       System.exit(1)
     }
   }
@@ -97,7 +92,4 @@ class HistoryDownloader(cookies: Map[String, String], config: Config) extends Lo
     browser.setCookies("/", cookies)
     browser
   }
-
-  private implicit def csvWriterResource[T]: Resource[CsvWriter[T]] =
-    (resource: CsvWriter[T]) => resource.close
 }
