@@ -14,7 +14,7 @@ object Launcher extends App with LogSupport {
   Logger.setDefaultFormatter(BareFormatter)
 
   info("-- Welcome to the Youtube History Downloader (YHD) --")
-  Config.parse(args: _*).foreach { config =>
+  Config.parse(args.toIndexedSeq: _*).foreach { config =>
     config.mode match {
       case Mode.Fetch =>
         info(s"Parsing Youtube cookies from '${config.cookies.getName}'...")

@@ -9,8 +9,8 @@ import org.jsoup.Connection.Method.{GET, POST}
 import org.jsoup.Connection.Response
 import org.jsoup.{Connection, Jsoup}
 
-import scala.collection.JavaConverters._
 import scala.collection.mutable
+import scala.jdk.CollectionConverters._
 
 class CustomBrowser(val userAgent: String = "jsoup/1.8", val proxy: java.net.Proxy = null) extends Browser {
   type DocumentType = JsoupDocument
