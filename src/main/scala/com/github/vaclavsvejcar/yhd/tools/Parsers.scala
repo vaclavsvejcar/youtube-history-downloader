@@ -9,7 +9,6 @@ object Parsers {
 
   private object Regexes {
     val sessionToken: Regex = """'XSRF_TOKEN': "(.*?)"""".r
-
   }
 
   /**
@@ -27,7 +26,7 @@ object Parsers {
       .replaceAll("; ", ";")
       .split(";")
     rawCookies.flatMap { cookie =>
-      val chunks = cookie.split("=")
+      val chunks = cookie.split("=", 2)
       if (chunks.size < 2) None else Some(chunks(0).trim -> chunks(1).trim)
     }.toMap
   }

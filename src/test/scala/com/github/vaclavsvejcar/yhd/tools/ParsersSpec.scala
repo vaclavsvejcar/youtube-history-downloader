@@ -17,17 +17,17 @@ object ParsersSpec extends TestSuite {
       val testData1 =
         """
           |Cookie: NAME1=value1; NAME2=value2;
-          |NAME3=value3
+          |NAME3=value3=withEqualSign
         """.stripMargin
       val testData2 =
         """
           |NAME1   = value1;NAME2=value2;
           |
-          |NAME3=value3
+          |NAME3=value3=withEqualSign
         """.stripMargin
       val testData3 = "completelyInvalidInput"
 
-      val expected = Map("NAME1" -> "value1", "NAME2" -> "value2", "NAME3" -> "value3")
+      val expected = Map("NAME1" -> "value1", "NAME2" -> "value2", "NAME3" -> "value3=withEqualSign")
 
       parseCookies(testData1) ==> expected
       parseCookies(testData2) ==> expected
