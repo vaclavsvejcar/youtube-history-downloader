@@ -1,6 +1,6 @@
 package com.github.vaclavsvejcar.yhd.tools
 
-import com.github.vaclavsvejcar.yhd.VideoRef
+import com.github.vaclavsvejcar.yhd.domain.VideoRef
 import net.ruippeixotog.scalascraper.browser.JsoupBrowser.JsoupDocument
 
 import scala.util.matching.Regex
@@ -25,9 +25,9 @@ object Parsers {
       .replaceAll("\n", "")
       .replaceAll("; ", ";")
       .split(";")
-    rawCookies.map { cookie =>
+    rawCookies.flatMap { cookie =>
       val chunks = cookie.split("=", 2)
-      chunks(0).trim -> chunks(1).trim
+      if (chunks.size != 2) None else Some(chunks(0).trim -> chunks(1).trim)
     }.toMap
   }
 

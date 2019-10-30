@@ -1,6 +1,6 @@
 package com.github.vaclavsvejcar.yhd.tools
 
-import com.github.vaclavsvejcar.yhd.VideoRef
+import com.github.vaclavsvejcar.yhd.domain.VideoRef
 import net.ruippeixotog.scalascraper.browser.JsoupBrowser.JsoupDocument
 import org.jsoup.Jsoup
 import utest._

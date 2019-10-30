@@ -1,5 +1,6 @@
 package com.github.vaclavsvejcar.yhd
 
+import com.github.vaclavsvejcar.yhd.downloader.HistoryDownloader
 import com.github.vaclavsvejcar.yhd.report.ReportGenerator
 import com.github.vaclavsvejcar.yhd.tools.{Parsers, Using}
 import wvlet.log.LogFormatter.BareFormatter
@@ -18,6 +19,7 @@ object Launcher extends App with LogSupport {
       case Mode.Fetch =>
         info(s"Parsing Youtube cookies from '${config.cookies.getName}'...")
         val rawCookies = Try(Using(Source.fromFile(config.cookies))(_.getLines().mkString("\n")))
+
         rawCookies.map(Parsers.parseCookies) match {
           case Success(cookies) => new HistoryDownloader(cookies, config).fetchAndSave()
           case Failure(ex) =>

@@ -1,6 +1,4 @@
-package com.github.vaclavsvejcar.yhd.report
-
-import com.github.vaclavsvejcar.yhd.VideoRef
+package com.github.vaclavsvejcar.yhd.domain
 
 case class ReportData(videos: Seq[VideoRef], uniqueNo: Int)
 

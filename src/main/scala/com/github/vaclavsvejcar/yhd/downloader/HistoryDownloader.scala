@@ -1,5 +1,7 @@
-package com.github.vaclavsvejcar.yhd
+package com.github.vaclavsvejcar.yhd.downloader
 
+import com.github.vaclavsvejcar.yhd.Config
+import com.github.vaclavsvejcar.yhd.domain.VideoRef
 import com.github.vaclavsvejcar.yhd.tools.Using
 import net.ruippeixotog.scalascraper.browser.JsoupBrowser.JsoupDocument
 import net.ruippeixotog.scalascraper.dsl.DSL.Extract._

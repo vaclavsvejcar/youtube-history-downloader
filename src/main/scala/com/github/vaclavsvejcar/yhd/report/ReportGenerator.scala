@@ -3,8 +3,9 @@ package com.github.vaclavsvejcar.yhd.report
 import java.io.{FileOutputStream, OutputStreamWriter}
 import java.nio.charset.StandardCharsets
 
+import com.github.vaclavsvejcar.yhd.domain.{ReportData, VideoRef}
 import com.github.vaclavsvejcar.yhd.tools.Using
-import com.github.vaclavsvejcar.yhd.{Config, VideoRef, abort}
+import com.github.vaclavsvejcar.yhd.{Config, abort}
 import kantan.csv._
 import kantan.csv.ops._
 import wvlet.log.LogSupport
