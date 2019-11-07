@@ -1,4 +1,4 @@
-<p align="center"><img src ="https://github.com/vaclavsvejcar/ytb-history-downloader/blob/master/readme-data/logo.png?raw=true" width="200" /></p>
+<p align="center"><img src ="https://github.com/vaclavsvejcar/youtube-history-downloader/blob/master/readme-data/logo.png?raw=true" width="200" /></p>
 
 # YouTube History Downloader
 
@@ -21,20 +21,20 @@ In order that _Youtube History Downloader_ can fetch your _YouTube_ history, you
 
 1. Open [YouTube](https://youtube.com) in your web browser.
 1. Find one of the request in _Developer tools_ and copy the _Cookie_ HTTP request header content.
-   <p align="center"><img src ="https://raw.githubusercontent.com/vaclavsvejcar/ytb-history-downloader/master/readme-data/cookies.jpg" width="400" /></p>
+   <p align="center"><img src ="https://raw.githubusercontent.com/vaclavsvejcar/youtube-history-downloader/master/readme-data/cookies.jpg" width="400" /></p>
 1. Copy that string into the `cookies.txt` file. The content should look like this:
    ```
    VISITOR_INFO1_LIVE=someTokenHere; PREF=f1=someTokenHere; CONSENT=YES+CZ.cs+20151207-13-0; YSC=someTokenHere; GPS=1;     SID=someTokenHere; HSID=someTokenHere; SSID=someTokenHere; APISID=T-someTokenHere/someTokenHere; SAPISID=someTokenHere; LOGIN_INFO=someTokenHere==
    ```
    
 ## Run from SBT
-1. Clone this repository: `git clone https://github.com/vaclavsvejcar/ytb-history-downloader.git`
+1. Clone this repository: `git clone https://github.com/vaclavsvejcar/youtube-history-downloader.git`
 1. Enter SBT console: `$ sbt`
 1. Fetch the history using the `> run fetch` command. This will save the history data into the `history.csv` file. Now you can open this file in your favorite CSV editor, or generate the HTML report.
 1. You can generate the HTML report using `> run report` command. This will generate HTML file `report.html`.
    > Please note that for large history files, opening the report in web browser may take some time.
 
-<p align="center"><img src ="https://raw.githubusercontent.com/vaclavsvejcar/ytb-history-downloader/master/readme-data/screenshot.jpg" /></p>
+<p align="center"><img src ="https://raw.githubusercontent.com/vaclavsvejcar/youtube-history-downloader/master/readme-data/screenshot.jpg" /></p>
 
 ## Command line options
 You can get the list of bellow option either by running the `java -jar yhd.jar --help` (binary) or `run --help` (SBT):
