@@ -1,4 +1,4 @@
-name := "ytb-history-downloader"
+name := "youtube-history-downloader"
 version := "0.1.0-SNAPSHOT"
 scalaVersion := "2.13.1"
 
@@ -8,7 +8,7 @@ assemblyJarName in assembly := "yhd.jar"
 libraryDependencies ++= Seq(
   "net.ruippeixotog" %% "scala-scraper" % "2.2.0",
   "com.typesafe.play" %% "play-json" % "2.7.4",
-  "org.wvlet.airframe" %% "airframe-log" % "19.10.1",
+  "org.wvlet.airframe" %% "airframe-log" % "19.11.0",
   "com.github.scopt" %% "scopt" % "3.7.1",
   "com.github.mpilquist" %% "simulacrum" % "0.19.0",
   "com.nrinaudo" %% "kantan.csv-generic" % "0.6.0",
