@@ -2,6 +2,7 @@ package com.github.vaclavsvejcar.yhd.downloader
 
 import com.github.vaclavsvejcar.yhd.Config
 import com.github.vaclavsvejcar.yhd.domain.VideoRef
+import com.github.vaclavsvejcar.yhd.parsers.{SessionParser, VideoRefParser}
 import com.github.vaclavsvejcar.yhd.tools.Using
 import net.ruippeixotog.scalascraper.browser.JsoupBrowser.JsoupDocument
 import net.ruippeixotog.scalascraper.dsl.DSL.Extract._
@@ -14,7 +15,8 @@ import scala.util.Try
 
 class HistoryDownloader(cookies: Map[String, String], config: Config) extends LogSupport {
 
-  import com.github.vaclavsvejcar.yhd.tools.Parsers._
+  import SessionParser._
+  import VideoRefParser._
 
   private object Url {
     val root    = "https://youtube.com"
@@ -57,10 +59,11 @@ class HistoryDownloader(cookies: Map[String, String], config: Config) extends Lo
         }
       }
 
-      val firstPageVideos = parseVideoRefs(document)
+      val (failures, firstPageVideos) = parseVideoRefs(document).partitionMap(identity)
       info(s"Iteration 1 - writing down initial list of videos (total ${firstPageVideos.size})")
       firstPageVideos.foreach(writer.write)
 
+      processFailures(failures)
       next(nextPageCToken(document), 1, firstPageVideos.size)
     }
   }
@@ -74,8 +77,11 @@ class HistoryDownloader(cookies: Map[String, String], config: Config) extends Lo
     val loadMoreHtml = (json \ "load_more_widget_html").asOpt[String].map(Jsoup.parse)
     val contentHtml  = (json \ "content_html").asOpt[String].map(Jsoup.parse)
     val nextCToken   = loadMoreHtml.map(JsoupDocument).flatMap(nextPageCToken)
-    val videos       = contentHtml.map(JsoupDocument).map(parseVideoRefs).getOrElse(Seq.empty)
+    val parsedVideos = contentHtml.map(JsoupDocument).map(parseVideoRefs).getOrElse(Seq.empty)
 
+    val (failures, videos) = parsedVideos.partitionMap(identity)
+
+    processFailures(failures)
     (nextCToken, videos)
   }
 
@@ -93,5 +99,12 @@ class HistoryDownloader(cookies: Map[String, String], config: Config) extends Lo
     val browser = new CustomBrowser()
     browser.setCookies("/", cookies)
     browser
+  }
+
+  private def processFailures(failures: Seq[ParseError]): Unit = {
+    // FIXME handle parsing failures better, log them somewhere for further inspection what happened
+    if (failures.nonEmpty) {
+      warn(s"${failures.size} video(s) were skipped (likely deleted or no longer available)")
+    }
   }
 }

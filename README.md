@@ -2,7 +2,7 @@
 
 # YouTube History Downloader
 
-Have you ever wanted to see your full YouTube watching history, but found out that YouTube doesn't allow you to do that? Scrolling down the history to get records more than few days back would be really a awful experience. Fortunately, here comes the _Youtube History Downloader_, small tool written in [Scala](https://www.scala-lang.org), that allows you to fetch your entire history within few minutes!
+Have you ever wanted to see your full YouTube watching history, but found out that YouTube doesn't allow you to do that? Scrolling down the history to get records more than few days back would be really a awful experience. Fortunately, here comes the _YouTube History Downloader_, small tool written in [Scala](https://www.scala-lang.org), that allows you to fetch your entire history within few minutes!
 
 > Please note this tool is still in development, so it might not work 100% and some functionality and documentation might be missing.
 
@@ -17,7 +17,7 @@ Have you ever wanted to see your full YouTube watching history, but found out th
 - improve the HTML report (more options, better performance)
 
 ## Get the YouTube cookies
-In order that _Youtube History Downloader_ can fetch your _YouTube_ history, you must copy the _YouTube_-related cookies from your web browser into the `cookies.txt` file placed inside the project main directory. Here are steps how to do it:
+In order that _YouTube History Downloader_ can fetch your _YouTube_ history, you must copy the _YouTube_-related cookies from your web browser into the `cookies.txt` file placed inside the project main directory. Here are steps how to do it:
 
 1. Open [YouTube](https://youtube.com) in your web browser.
 1. Find one of the request in _Developer tools_ and copy the _Cookie_ HTTP request header content.
@@ -45,8 +45,8 @@ Usage: yhd [fetch|report] [options]
   --help                   Prints this help text
 Command: fetch [options]
 Fetches the youtube history into the output CSV file
-  -c, --cookies <file>     file containing the copied Youtube cookies (default: cookies.txt)
-  -o, --output <file>      Output CSV file with Youtube history (default: history.csv)
+  -c, --cookies <file>     file containing the copied YouTube cookies (default: cookies.txt)
+  -o, --output <file>      Output CSV file with YouTube history (default: history.csv)
 Command: report [options]
 Generates pretty HTML report from the previously fetched CSV file
   -o, --output <file>      Output HTML file with the generated report (default: report.html)

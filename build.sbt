@@ -16,10 +16,9 @@ libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-core" % "2.0.0",
 
   // TEST dependencies
-  "com.lihaoyi" %% "utest" % "0.7.1" % "test"
+  "org.scalactic" %% "scalactic" % "3.0.8",
+  "org.scalatest" %% "scalatest" % "3.0.8" % "test"
 )
-
-testFrameworks += new TestFramework("utest.runner.Framework")
 
 addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.11.0" cross CrossVersion.full)
 

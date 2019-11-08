@@ -1,8 +1,9 @@
 package com.github.vaclavsvejcar.yhd
 
 import com.github.vaclavsvejcar.yhd.downloader.HistoryDownloader
+import com.github.vaclavsvejcar.yhd.parsers.SessionParser
 import com.github.vaclavsvejcar.yhd.report.ReportGenerator
-import com.github.vaclavsvejcar.yhd.tools.{Parsers, Using}
+import com.github.vaclavsvejcar.yhd.tools.Using
 import wvlet.log.LogFormatter.BareFormatter
 import wvlet.log.{LogSupport, Logger}
 
@@ -20,7 +21,7 @@ object Launcher extends App with LogSupport {
         info(s"Parsing Youtube cookies from '${config.cookies.getName}'...")
         val rawCookies = Try(Using(Source.fromFile(config.cookies))(_.getLines().mkString("\n")))
 
-        rawCookies.map(Parsers.parseCookies) match {
+        rawCookies.map(SessionParser.parseCookies) match {
           case Success(cookies) => new HistoryDownloader(cookies, config).fetchAndSave()
           case Failure(ex) =>
             println(s"Cannot read file '${config.cookies.getName}' with Youtube cookies (reason: $ex)")
