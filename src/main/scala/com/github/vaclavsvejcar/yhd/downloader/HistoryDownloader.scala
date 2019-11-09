@@ -102,9 +102,14 @@ class HistoryDownloader(cookies: Map[String, String], config: Config) extends Lo
   }
 
   private def processFailures(failures: Seq[ParseError]): Unit = {
-    // FIXME handle parsing failures better, log them somewhere for further inspection what happened
     if (failures.nonEmpty) {
-      warn(s"${failures.size} video(s) were skipped (likely deleted or no longer available)")
+      warn(s"${failures.size} video(s) were skipped due to parsing errors (re-run with --debug for details)")
+      failures.foreach { failure =>
+        failure.cause match {
+          case Some(cause) => debug(failure.withoutCause, cause)
+          case None        => debug(failure)
+        }
+      }
     }
   }
 }

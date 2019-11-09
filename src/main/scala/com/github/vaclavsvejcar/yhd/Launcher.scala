@@ -1,5 +1,7 @@
 package com.github.vaclavsvejcar.yhd
 
+import java.util.Properties
+
 import com.github.vaclavsvejcar.yhd.downloader.HistoryDownloader
 import com.github.vaclavsvejcar.yhd.parsers.SessionParser
 import com.github.vaclavsvejcar.yhd.report.ReportGenerator
@@ -13,11 +15,17 @@ import scala.util.{Failure, Success, Try}
 object Launcher extends App with LogSupport {
 
   Logger.setDefaultFormatter(BareFormatter)
+  Logger.scanLogLevels
 
   info("-- Welcome to the Youtube History Downloader (YHD) --")
   Config.parse(args.toIndexedSeq: _*).foreach { config =>
     config.mode match {
       case Mode.Fetch =>
+        if (config.debug) {
+          val logLevels = new Properties()
+          logLevels.setProperty(getClass.getPackage.getName, "debug")
+          Logger.setLogLevels(logLevels)
+        }
         info(s"Parsing Youtube cookies from '${config.cookies.getName}'...")
         val rawCookies = Try(Using(Source.fromFile(config.cookies))(_.getLines().mkString("\n")))
 

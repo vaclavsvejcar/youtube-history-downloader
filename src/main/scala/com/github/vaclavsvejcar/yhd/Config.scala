@@ -20,6 +20,7 @@ object Mode extends Enum[Mode] {
 
 case class Config(
   mode: Mode = Mode.Other,
+  debug: Boolean = false,
   cookies: File = new File("cookies.txt"),
   history: File = new File("history.csv"),
   report: File = new File("report.html")
@@ -44,7 +45,10 @@ object Config {
         opt[File]('o', "output")
           .valueName("<file>")
           .action((x, c) => c.copy(history = x))
-          .text(s"Output CSV file with Youtube history (default: ${Default.history.getName})")
+          .text(s"Output CSV file with Youtube history (default: ${Default.history.getName})"),
+        opt[Unit]('d', "debug")
+          .action((_, c) => c.copy(debug = true))
+          .text("Produces more verbose output for debugging purposes")
       )
 
     cmd("report")

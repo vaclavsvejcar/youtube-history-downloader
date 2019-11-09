@@ -10,7 +10,9 @@ object VideoRefParser {
   import net.ruippeixotog.scalascraper.dsl.DSL.Extract._
   import net.ruippeixotog.scalascraper.dsl.DSL._
 
-  case class ParseError(message: String, elem: Element, cause: Option[Throwable])
+  case class ParseError(message: String, elem: Element, cause: Option[Throwable]) {
+    def withoutCause: ParseError = this.copy(cause = None)
+  }
 
   def parseVideoRefs(document: JsoupDocument): Seq[Either[ParseError, VideoRef]] =
     (document >> elementList(".yt-lockup-video")).map(parseVideoRef)
