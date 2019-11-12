@@ -36,7 +36,12 @@ class ReportGenerator(config: Config) extends LogSupport {
     csv.sequence[Either[ReadError, *], VideoRef] match {
       case Right(videoRefs) => videoRefs
       case Left(error) =>
-        abort(s"Error during parsing the ${config.history.getName} CSV file (maybe corrupted file?).", error)
+        abort(
+          s"""
+             |Error during parsing the ${config.history.getName} CSV file (maybe corrupted file, 
+             |please re-run 'fetch' command).""".stripMargin,
+          error
+        )
     }
   }
 

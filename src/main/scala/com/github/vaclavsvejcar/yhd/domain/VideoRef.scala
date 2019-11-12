@@ -7,8 +7,8 @@ final case class VideoRef(
   title: String,
   description: Option[String],
   duration: Option[String],
-  user: String,
-  userLink: String
+  author: String,
+  authorLink: String
 )
 
 object VideoRef {
@@ -17,8 +17,8 @@ object VideoRef {
     "title",
     "description",
     "duration",
-    "user",
-    "userLink"
+    "author",
+    "authorLink"
   )(VideoRef.apply)(VideoRef.unapply)
 
 }
