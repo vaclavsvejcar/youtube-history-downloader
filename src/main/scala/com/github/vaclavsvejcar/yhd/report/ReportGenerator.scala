@@ -38,8 +38,8 @@ class ReportGenerator(config: Config) extends LogSupport {
       case Left(error) =>
         abort(
           s"""
-             |Error during parsing the ${config.history.getName} CSV file (maybe corrupted file, 
-             |please re-run 'fetch' command).""".stripMargin,
+             |Error during parsing the ${config.history.getName} CSV file (maybe corrupted file,
+             |please re-run the 'fetch' command).""".stripMargin.replaceAll("\n", " "),
           error
         )
     }
