@@ -6,13 +6,13 @@ final case class VideoRef(
   id: String,
   title: String,
   description: Option[String],
-  duration: String,
+  duration: Option[String],
   user: String,
   userLink: String
 )
 
 object VideoRef {
-  implicit val headerCodec: HeaderCodec[VideoRef] = HeaderCodec.caseCodec(
+  implicit val csvCodec: HeaderCodec[VideoRef] = HeaderCodec.caseCodec(
     "id",
     "title",
     "description",

@@ -23,7 +23,8 @@ object VideoRefParser {
       title <- extract(elem, "video title")(_ >> element("a.yt-uix-tile-link") >> attr("title"))
       desc  <- extract(elem, "video description")(_ >?> element(".yt-lockup-description") >> text)
       duration <- extract(elem, "video duration") { video =>
-        (video >> element(".video-time") >?> element("span") >> text).getOrElse(video >> element(".video-time") >> text)
+        val videoTime = video >?> element(".video-time")
+        videoTime.flatMap(_ >?> element("span") >> text).orElse(videoTime.flatMap(_ >?> element("span") >> text))
       }
       user     <- extract(elem, "user info")(_ >> element(".yt-lockup-byline > a"))
       userName <- extract(user, "user name")(_ >> text)
