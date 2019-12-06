@@ -3,11 +3,12 @@ package com.github.vaclavsvejcar.yhd.parsers
 import com.github.vaclavsvejcar.yhd.domain.VideoRef
 import net.ruippeixotog.scalascraper.browser.JsoupBrowser.JsoupDocument
 import org.jsoup.Jsoup
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 import scala.io.Source
 
-class VideoRefParserSpec extends FlatSpec with Matchers {
+class VideoRefParserSpec extends AnyFlatSpec with Matchers {
 
   "VideoRef parser" should "parse VideoRefs from JsoupDocument" in {
     val source   = Source.fromResource("removed-video-snippet.html").getLines().mkString("\n")

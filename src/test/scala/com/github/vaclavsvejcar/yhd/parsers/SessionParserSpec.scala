@@ -1,8 +1,9 @@
 package com.github.vaclavsvejcar.yhd.parsers
 
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class SessionParserSpec extends FlatSpec with Matchers {
+class SessionParserSpec extends AnyFlatSpec with Matchers {
 
   "Session parser" should "parse cookies from raw input" in {
     val testData1 =
