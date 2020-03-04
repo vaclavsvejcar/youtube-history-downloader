@@ -7,17 +7,17 @@ assemblyJarName in assembly := "yhd.jar"
 
 libraryDependencies ++= Seq(
   "net.ruippeixotog" %% "scala-scraper" % "2.2.0",
-  "com.typesafe.play" %% "play-json" % "2.8.0",
-  "org.wvlet.airframe" %% "airframe-log" % "19.11.2",
+  "com.typesafe.play" %% "play-json" % "2.8.1",
+  "org.wvlet.airframe" %% "airframe-log" % "20.2.1",
   "com.github.scopt" %% "scopt" % "3.7.1",
   "com.github.mpilquist" %% "simulacrum" % "0.19.0",
   "com.nrinaudo" %% "kantan.csv-generic" % "0.6.0",
-  "com.beachape" %% "enumeratum" % "1.5.13",
-  "org.typelevel" %% "cats-core" % "2.0.0",
+  "com.beachape" %% "enumeratum" % "1.5.15",
+  "org.typelevel" %% "cats-core" % "2.1.1",
 
   // TEST dependencies
-  "org.scalactic" %% "scalactic" % "3.1.0",
-  "org.scalatest" %% "scalatest" % "3.1.0" % "test"
+  "org.scalactic" %% "scalactic" % "3.1.1",
+  "org.scalatest" %% "scalatest" % "3.1.1" % "test"
 )
 
 addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.11.0" cross CrossVersion.full)
